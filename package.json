@@ -1,8 +1,9 @@
 {
   "name": "wetube",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "scripts": {
+    "dev": "babel-node index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bnbnac/wetube.git"
@@ -12,5 +13,13 @@
   "bugs": {
     "url": "https://github.com/bnbnac/wetube/issues"
   },
-  "homepage": "https://github.com/bnbnac/wetube#readme"
+  "homepage": "https://github.com/bnbnac/wetube#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@babel/node": "^7.22.10",
+    "@babel/preset-env": "^7.22.10"
+  }
 }
