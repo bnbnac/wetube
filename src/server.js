@@ -7,6 +7,18 @@ app.listen(PORT, () =>
   console.log(`server is listening on http://localhost:${PORT}`)
 );
 
-app.get("/", (req, res) => {
+const firstMiddleware = (req, res, next) => {
+  console.log("hello from first");
+  next();
+};
+
+const secondMiddleware = (req, res, next) => {
+  console.log("hello from second");
+  next();
+};
+
+const finalController = (req, res) => {
   return res.send("hello " + req.headers["user-agent"]);
-});
+};
+
+app.get("/", firstMiddleware, secondMiddleware, finalController);
