@@ -1,0 +1,16 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bnbnac/wetube.git"
+  },
+  "author": "bnbnac",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bnbnac/wetube/issues"
+  },
+  "homepage": "https://github.com/bnbnac/wetube#readme"
+}
