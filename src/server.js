@@ -7,8 +7,8 @@ app.listen(PORT, () =>
   console.log(`server is listening on http://localhost:${PORT}`)
 );
 
-const firstMiddleware = (req, res, next) => {
-  console.log("hello from first");
+const globalMiddleware = (req, res, next) => {
+  console.log("hello from global");
   next();
 };
 
@@ -21,4 +21,7 @@ const finalController = (req, res) => {
   return res.send("hello " + req.headers["user-agent"]);
 };
 
-app.get("/", firstMiddleware, secondMiddleware, finalController);
+app.get("/former", finalController);
+app.use(globalMiddleware); // global middleware. note the position
+app.get("/", globalMiddleware, secondMiddleware, finalController);
+app.get("/later", finalController);
