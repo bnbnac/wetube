@@ -2,9 +2,22 @@ extends base.pug
 include mixins/video.pug
 
 block content
+    header
+        if fakeUser.loggedIn
+            small Hello #{fakeUser.username}
+        nav 
+            ul 
+                if fakeUser.loggedIn 
+                    li
+                        a(href="/logout") Logout
+                else
+                    li
+                        a(href="/login") Login
+        h1=pageTitle
+
     h2 welcome you will see trending video
     ul
-        each video in videos
+        each video in videosOnFakeDB
             +video(video)
         else 
-            li sorry nothing foundextends base
+            li sorry nothing found
