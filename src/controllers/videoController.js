@@ -54,4 +54,11 @@ export const postEdit = (req, res) => {
 };
 export const search = (req, res) => res.send("search video");
 export const remove = (req, res) => res.send("remove video " + req.params.id);
-export const upload = (req, res) => res.send("upload video");
+export const getUpload = (req, res) => {
+  res.render("upload", { videosOnFakeDB, pageTitle: "Upload Video" });
+};
+export const postUpload = (req, res) => {
+  console.log(req.body);
+  // do upload
+  res.redirect("/");
+};
