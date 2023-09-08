@@ -1,54 +1,31 @@
+import Video from "../models/Video";
+
 const fakeUser = {
   username: "bnbnac",
   loggedIn: true,
 };
 
-let videosOnFakeDB = [
-  {
-    title: "First Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 1,
-  },
-  {
-    title: "Second Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 2,
-  },
-  {
-    title: "Third Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 3,
-  },
-];
-
-export const trending = (req, res) => {
-  res.render("home", { pageTitle: "Home", fakeUser, videosOnFakeDB });
+export const home = (req, res) => {
+  Video.find({})
+    .then((videos) => {
+      console.log("videos", videos);
+      res.render("home", { pageTitle: "Home", fakeUser, videos });
+    })
+    .catch((e) => console.log("errors", e));
 };
 export const watch = (req, res) => {
   const { id } = req.params;
-  const video = videosOnFakeDB[id - 1];
-  res.render("watch", { video, pageTitle: `Watching: ${video.title}` });
+  res.render("watch", { video: [], pageTitle: `Watching: {video.title}` });
 };
 export const getEdit = (req, res) => {
   const { id } = req.params;
-  const video = videosOnFakeDB[id - 1];
-  res.render("edit", { video, pageTitle: `Editing: ${video.title}` });
+  res.render("edit", { video: [], pageTitle: `Editing: {video.title}` });
 };
 export const postEdit = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
 
   // change the title in the (real)database here
-  videosOnFakeDB[id - 1].title = title;
 
   res.redirect(`/videos/${id}`);
 };
