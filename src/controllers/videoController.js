@@ -5,13 +5,14 @@ const fakeUser = {
   loggedIn: true,
 };
 
-export const home = (req, res) => {
-  Video.find({})
-    .then((videos) => {
-      console.log("videos", videos);
-      res.render("home", { pageTitle: "Home", fakeUser, videos });
-    })
-    .catch((e) => console.log("errors", e));
+export const home = async (req, res) => {
+  try {
+    const videos = await Video.find({});
+    console.log("videos", videos);
+    res.render("home", { pageTitle: "Home", fakeUser, videos });
+  } catch (e) {
+    console.log("errors", e);
+  }
 };
 export const watch = (req, res) => {
   const { id } = req.params;
