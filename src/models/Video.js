@@ -11,6 +11,13 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
+// it should be front of creating model ```mongoose.model()```
+videoSchema.pre("save", async function () {
+  this.hashtags = this.hashtags[0].split(",").map((word) => {
+    word.startsWith("#") ? word.trim() : "#" + word.trim();
+  });
+});
+
 const Video = mongoose.model("Video", videoSchema);
 
 export default Video;
