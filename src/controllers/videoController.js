@@ -13,6 +13,7 @@ export const home = async (req, res) => {
     return console.log("errors", e);
   }
 };
+
 export const watch = async (req, res) => {
   const { id } = req.params;
   try {
@@ -30,6 +31,7 @@ export const watch = async (req, res) => {
     return res.redirect("/");
   }
 };
+
 export const getEdit = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
@@ -38,19 +40,30 @@ export const getEdit = async (req, res) => {
   }
   return res.render("edit", { video, pageTitle: `Editing: ${video.title}` });
 };
-export const postEdit = (req, res) => {
+
+export const postEdit = async (req, res) => {
   const { id } = req.params;
-  const { title } = req.body;
-
-  // change the title in the (real)database here
-
+  const { title, description, hashtags } = req.body;
+  const video = await Video.exists({ _id: id });
+  if (!video) {
+    return res.render("404", { pageTitle: "video not found" });
+  }
+  await Video.findByIdAndUpdate(id, {
+    title,
+    description,
+    hashtags: hashtags
+      .split(",")
+      .map((word) => (word.startsWith("#") ? word.trim() : "#" + word.trim())),
+  });
   return res.redirect(`/videos/${id}`);
 };
+
 export const search = (req, res) => res.send("search video");
 export const remove = (req, res) => res.send("remove video " + req.params.id);
 export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
 };
+
 export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
   try {
@@ -60,7 +73,6 @@ export const postUpload = async (req, res) => {
       hashtags: hashtags.split(",").map((word) => "#" + word.trim()),
     });
     await video.save();
-    console.log(video);
     return res.redirect("/");
   } catch (e) {
     console.log(e);
