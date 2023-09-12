@@ -13,16 +13,30 @@ export const home = async (req, res) => {
     return console.log("errors", e);
   }
 };
-export const watch = (req, res) => {
+export const watch = async (req, res) => {
   const { id } = req.params;
-  return res.render("watch", {
-    video: [],
-    pageTitle: `Watching: {video.title}`,
-  });
+  try {
+    const video = await Video.findById(id);
+    if (!video) {
+      return res.render("404", { pageTitle: "Video not found." });
+    }
+    return res.render("watch", {
+      video,
+      pageTitle: video.title,
+    });
+  } catch (e) {
+    // info something to client
+    console.log(e);
+    return res.redirect("/");
+  }
 };
-export const getEdit = (req, res) => {
+export const getEdit = async (req, res) => {
   const { id } = req.params;
-  return res.render("edit", { video: [], pageTitle: `Editing: {video.title}` });
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.render("404", { pageTitle: "Video not found." });
+  }
+  return res.render("edit", { video, pageTitle: `Editing: ${video.title}` });
 };
 export const postEdit = (req, res) => {
   const { id } = req.params;
@@ -46,6 +60,7 @@ export const postUpload = async (req, res) => {
       hashtags: hashtags.split(",").map((word) => "#" + word.trim()),
     });
     await video.save();
+    console.log(video);
     return res.redirect("/");
   } catch (e) {
     console.log(e);
