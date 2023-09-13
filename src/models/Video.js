@@ -11,11 +11,11 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
-// it should be front of creating model ```mongoose.model()```
-videoSchema.pre("save", async function () {
-  this.hashtags = this.hashtags[0].split(",").map((word) => {
-    word.startsWith("#") ? word.trim() : "#" + word.trim();
-  });
+videoSchema.static("formatHashtags", function (hashtags) {
+  return hashtags
+    .split(/\#|,/)
+    .filter((word) => word.trim().length > 0)
+    .map((word) => "#" + word.trim());
 });
 
 const Video = mongoose.model("Video", videoSchema);
