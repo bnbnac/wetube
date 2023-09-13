@@ -7,7 +7,7 @@ const fakeUser = {
 
 export const home = async (req, res) => {
   try {
-    const videos = await Video.find({});
+    const videos = await Video.find({}).sort({ createdAt: "desc" });
     return res.render("home", { pageTitle: "Home", fakeUser, videos });
   } catch (e) {
     return console.log("errors", e);
@@ -56,8 +56,6 @@ export const postEdit = async (req, res) => {
   return res.redirect(`/videos/${id}`);
 };
 
-export const search = (req, res) => res.send("search video");
-export const remove = (req, res) => res.send("remove video " + req.params.id);
 export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
 };
@@ -79,4 +77,23 @@ export const postUpload = async (req, res) => {
       errorMessage: e._message,
     });
   }
+};
+
+export const remove = async (req, res) => {
+  const { id } = req.params;
+  await Video.findByIdAndDelete(id);
+  return res.redirect("/");
+};
+
+export const search = async (req, res) => {
+  let videos = [];
+  const { keyword } = req.query;
+  if (keyword) {
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(`^${keyword}`, "i"), // mongoDB works
+      },
+    });
+  }
+  return res.render("search", { pageTitle: "Search", videos });
 };
