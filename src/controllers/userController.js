@@ -120,14 +120,13 @@ export const finishGithubLogin = async (req, res) => {
     }
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
-      const user = await User.create({
+      user = await User.create({
         avatarUrl: userData.avatar_url,
         name: userData.name,
         username: userData.login,
         email: emailObj.email,
         location: userData.location,
         socialOnly: true,
-        password: "",
       });
     }
     req.session.loggedIn = true;
