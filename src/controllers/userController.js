@@ -151,6 +151,7 @@ export const postEdit = async (req, res) => {
       user: { _id },
     },
     body: { name, username, location },
+    file,
   } = req;
 
   const exists = await User.exists({
