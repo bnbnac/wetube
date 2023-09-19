@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   avatarUrl: String,
   password: {
     type: String,
-    maxlength: 10,
+    maxlength: 100,
     minlength: 4,
     required: function () {
       return !this.socialOnly;
@@ -16,10 +16,15 @@ const userSchema = new mongoose.Schema({
   },
   name: { type: String, required: true },
   location: String,
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
 });
 
 userSchema.pre("save", async function () {
-  if (this.password) {
+  // to check socialOnly(no password)
+  //   if (this.password) {
+
+  // check if user.save() done with modified password
+  if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 5);
   }
 });
